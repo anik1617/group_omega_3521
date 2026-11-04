@@ -11,7 +11,7 @@ Streamlit application. Models and the application are not implemented yet.
 | Aniket Chaudhari | Project Lead |
 | Sophiya Khurana | Data Engineer / Writer |
 | Ethan Brown | Data Engineer / Writer |
-| Lianyu Yang | App Engineer / Writer |
+| Lianyu Yang | App Engineer |
 | Shilin | ML Engineer |
 
 ## Local data setup
