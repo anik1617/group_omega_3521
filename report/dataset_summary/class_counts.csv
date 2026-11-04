@@ -1,0 +1,6 @@
+stage,class,count,percent_within_stage
+raw_50000,negative,7138,14.276
+raw_50000,neutral,3834,7.668
+raw_50000,positive,39028,78.056
+clean_binary,negative,6623,15.4855
+clean_binary,positive,36146,84.5145
