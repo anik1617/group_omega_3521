@@ -1,6 +1,7 @@
-stage,class,count,percent_within_stage
-raw_50000,negative,7138,14.276
-raw_50000,neutral,3834,7.668
-raw_50000,positive,39028,78.056
-clean_binary,negative,6623,15.4855
-clean_binary,positive,36146,84.5145
+stage,sentiment,count,percent
+sample,negative,7342,14.68
+sample,neutral,3660,7.32
+sample,positive,38998,78.0
+clean,negative,6837,14.75
+clean,neutral,3394,7.32
+clean,positive,36113,77.92

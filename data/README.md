@@ -2,43 +2,55 @@
 
 Source: https://www.kaggle.com/datasets/snap/amazon-fine-food-reviews
 
-Run from the repository root with Python 3.11 or newer (standard library only):
+Run from the repository root with Python 3.11 or newer:
 
 ```powershell
+pip install -r requirements.txt
 python scripts/setup_data.py
+python scripts/prepare_sample.py
 ```
 
-This downloads the complete Kaggle archive into `data/raw/` and extracts
-`data/raw/Reviews.csv`. Existing CSV files are validated without downloading again.
-The script reports the row count and SHA-256; it does not clean or modify the CSV.
-The full dataset is for exploration, separate from the instructor's shared
-50,000-review sample. No sentiment mapping or train/test split is selected.
+`setup_data.py` downloads the complete Kaggle archive into `data/raw/`, extracts
+`data/raw/Reviews.csv` (568,454 rows), and prints its row count and SHA-256. It uses
+only the standard library and does not modify the CSV.
 
-Once the instructor sample is available, save it as
-`data/raw/instructor_sample.csv` and validate it:
+`prepare_sample.py` builds the team dataset exactly as the instructor's script does:
+
+```python
+pd.read_csv("Reviews.csv").sample(n=50000, random_state=46)
+```
+
+Seed 46 is Group Omega's assigned seed. Do not resample with a different seed. The
+script writes:
+
+- `data/raw/group_sample_seed46.csv`: the 50,000-review team dataset. If the file
+  already exists (for example, copied from the instructor-script output in
+  Downloads), the script reuses it instead of resampling.
+- `data/processed/group_seed46_clean.csv`: three-class labels (1–2 negative,
+  3 neutral, 4–5 positive) in a `Sentiment` column, with repeated reviews removed.
+- `report/dataset_summary/`: statistics, class counts, and the Figure 1 chart.
+
+To check a sample file someone else made, validate its columns and hash:
 
 ```powershell
-python scripts/setup_data.py --kind shared --csv data/raw/instructor_sample.csv
+python scripts/setup_data.py --kind shared --csv data/raw/group_sample_seed46.csv
 ```
 
-The sample must retain the original ten CSV columns. Confirm its source/version
-and expected row count with the instructor. The script does not create a substitute
-sample or copy a CSV passed through `--csv`. Read CSVs directly during analysis
-and model training; no database service is required.
+The SHA-256 should be `b850d24da52d97eeeccf04cdc5bbddd73409afdc3d092c096189c9a26af2b89b`.
 
-## Fields to inspect
+## Fields
 
-- `Text`: full review; `Summary`: review headline. These are the intended text inputs.
-- `Score`: 1–5 star rating, used to derive labels. Never include it as an input feature.
+- `Text`: full review; `Summary`: review headline. These are the model inputs.
+- `Score`: 1–5 star rating, used only to derive labels. Never use it as an input feature.
 - `Id`, `ProductId`, `UserId`, `ProfileName`: identifiers and reviewer information.
 - `HelpfulnessNumerator`, `HelpfulnessDenominator`: helpful votes and total votes.
 - `Time`: Unix timestamp.
 
-Before reporting M1 facts, inspect the SHARED sample for missing/blank text, class
-counts, average whitespace-token review length, and repeated Summary/Text pairs.
-Agree on label mapping and duplicate handling before creating shared data splits.
-Do not commit raw data or downloaded archives.
+## Repeated reviews
 
-## Provisional team-created sample
+Two rows count as the same review when their `Summary` and `Text` match after
+collapsing whitespace and ignoring case (`dedup_key()` in `scripts/prepare_sample.py`).
+Use the same key when creating train/validation/test splits so a repeated review
+cannot appear in more than one split.
 
-Run python scripts/prepare_sample.py to create a uniform 50,000-row sample with seed 42 and a separate cleaned binary CSV. The raw sample is data/raw/provisional_sample_50000_seed42.csv; the binary file is data/processed/provisional_binary_clean_seed42.csv. Measured statistics and provenance are saved in report/dataset_summary/statistics.json. See report/dataset_summary/SUMMARY.md for the summary and chart. Confirm with the instructor before using this sample in place of the shared course sample.
+Do not commit raw data, processed CSVs, or downloaded archives.

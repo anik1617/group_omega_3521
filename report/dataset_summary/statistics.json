@@ -1,67 +1,40 @@
 {
-  "status": "PROVISIONAL team-created sample; instructor shared-sample approval unconfirmed",
+  "group": "Omega",
+  "seed": 46,
+  "method": "pd.read_csv(Reviews.csv).sample(n=50000, random_state=46), per instructor script",
   "source": "https://www.kaggle.com/datasets/snap/amazon-fine-food-reviews",
   "source_sha256": "a88348c20ed3f85d647e8fbaac0a730ab2f09f95e5d1f4bcf1f9e3650ef624d7",
-  "source_rows": 568454,
-  "sampling": {
-    "method": "uniform reservoir sampling without replacement; sample before filtering",
-    "seed": 42,
-    "requested_rows": 50000,
-    "sample_sha256": "37dc5633266911c8f909e89d0237b9e3a7d8e5e9c1445d4f53a8ba7048074f81"
-  },
+  "sample_sha256": "b850d24da52d97eeeccf04cdc5bbddd73409afdc3d092c096189c9a26af2b89b",
   "sample_rows": 50000,
   "score_counts": {
-    "1": 4549,
-    "2": 2589,
-    "3": 3834,
-    "4": 7112,
-    "5": 31916
+    "1": 4634,
+    "2": 2708,
+    "3": 3660,
+    "4": 7164,
+    "5": 31834
   },
-  "mean_text_words": 80.52728,
-  "mean_summary_plus_text_words": 84.63922,
-  "missing_or_whitespace_only": {
-    "Id": 0,
-    "ProductId": 0,
-    "UserId": 0,
-    "ProfileName": 0,
-    "HelpfulnessNumerator": 0,
-    "HelpfulnessDenominator": 0,
-    "Score": 0,
-    "Time": 0,
-    "Summary": 0,
-    "Text": 0
+  "sentiment_counts": {
+    "negative": 7342,
+    "neutral": 3660,
+    "positive": 38998
   },
-  "placeholder_like_strings_for_review_not_automatically_missing": {
-    "ProfileName": {
-      "NONE": 1,
-      "nan": 3,
-      "Nan": 2,
-      "None": 1
-    },
-    "Summary": {
-      "N/A": 5
-    }
+  "mean_text_words": 80.29658,
+  "median_text_words": 56.0,
+  "missing_values_as_read_by_pandas": {
+    "ProfileName": 1,
+    "Summary": 2
   },
-  "duplicate_complete_rows_beyond_first": 0,
-  "duplicate_exact_summary_text_beyond_first": 3666,
-  "duplicate_normalized_summary_text_beyond_first": 3674,
   "invalid_score_rows": 0,
-  "binary_before_deduplication": {
-    "positive": 39028,
-    "negative": 7138
+  "duplicate_rows_ignoring_id": 2,
+  "repeated_summary_text_beyond_first": 3656,
+  "rows_in_conflicting_label_groups_removed": 0,
+  "clean_rows": 46344,
+  "clean_sentiment_counts": {
+    "negative": 6837,
+    "neutral": 3394,
+    "positive": 36113
   },
-  "neutral_rows_excluded": 3834,
-  "binary_cleaning": {
-    "conflicting_sentiment_group_rows_removed": 0,
-    "duplicate_rows_removed_after_conflict_exclusion": 3397,
-    "blank_text_rows_removed": 0
-  },
-  "binary_clean_rows": 42769,
-  "binary_clean_class_counts": {
-    "positive": 36146,
-    "negative": 6623
-  },
-  "binary_clean_mean_text_words": 78.69943183146671,
-  "binary_clean_sha256": "8f77d09cde3007548504b9bb007a8b61f11de48ca4bbf9cb98ffc7d407c13ee8",
-  "cleaning": "Exclude 3-star reviews; remove all binary groups with conflicting sentiment; retain first row per casefolded, whitespace-normalized Summary/Text pair. Preserve original CSV text."
+  "clean_mean_text_words": 79.80523908165027,
+  "clean_sha256": "1d306cfb8905ea39a4813d3db08b6d1757757bd145666299a7eb9be652924c44",
+  "cleaning": "Labels: 1-2 negative, 3 neutral, 4-5 positive. Drop every row whose normalized Summary+Text has conflicting labels; keep the first row of other repeats; drop rows with missing Text."
 }

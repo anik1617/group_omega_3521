@@ -16,35 +16,29 @@ Streamlit application. Models and the application are not implemented yet.
 
 ## Local data setup
 
-Python 3.11+; no third-party packages needed for data setup.
+Python 3.11+.
 
 ```powershell
+pip install -r requirements.txt
 python scripts/setup_data.py
-```
-
-See [data setup instructions](data/README.md) for validating the instructor's shared
-sample. The full Kaggle download is separate from the required shared sample.
-
-To reproduce the provisional 50,000-review sample and summary statistics:
-
-```powershell
 python scripts/prepare_sample.py
 ```
 
-The sample uses seed 42 and still needs instructor approval. The charter plans
-three classes: negative (1–2 stars), neutral (3 stars), and positive (4–5 stars).
-The script also produces a separate binary dataset from an earlier exploration;
-that file excludes neutral reviews and is not the three-class training dataset.
+`setup_data.py` downloads the full Kaggle `Reviews.csv`. `prepare_sample.py` draws
+Group Omega's 50,000-review sample with the instructor's method and our assigned
+seed, 46 (`df.sample(n=50000, random_state=46)`), then writes the cleaned
+three-class dataset and the summary statistics. Labels: negative (1–2 stars),
+neutral (3 stars), positive (4–5 stars). See [data setup instructions](data/README.md).
 
 ## Milestone 1
 
 - [Working charter](https://docs.google.com/document/d/1wIlXwJSuGBldoeKHOvrOfHx-uvpAIfMrQg1aW8XH1gY/edit)
 - [Draft charter PDF](report/milestone1_draft.pdf)
 - [Dataset measurements](report/dataset_summary/SUMMARY.md)
-- [Three-class sample chart](report/dataset_summary/sentiment_sample_50000.png)
+- [Sentiment chart](report/dataset_summary/sentiment_seed46.png)
 
 The PDF is a draft snapshot. Check the working charter for current edits and
 remaining placeholders before submission.
 
 Live app URL: pending deployment.
-Model training instructions and pinned dependencies: pending implementation.
+Model training instructions: pending implementation.

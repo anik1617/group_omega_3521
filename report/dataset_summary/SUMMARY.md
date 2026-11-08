@@ -1,59 +1,48 @@
-# Dataset summary measurements
-
-**Provisional team-created sample. Confirm permission to use it instead of the instructor shared sample.**
+# Dataset summary: Group Omega sample (seed 46)
 
 ## Sampling
 
-- Source: full Kaggle Reviews.csv (568,454 rows).
-- Uniform sample of 50,000 rows without replacement; reservoir sampling with Python random.Random(42).
-- Sampled before filtering or deduplication; original source order and text retained.
-- Raw sample: data/raw/provisional_sample_50000_seed42.csv
-- Clean binary CSV: data/processed/provisional_binary_clean_seed42.csv
+- Source: full Kaggle `Reviews.csv` (568,454 rows).
+- Drawn with the instructor's script: `pd.read_csv(Reviews.csv).sample(n=50000, random_state=46)`. Seed 46 is Group Omega's assigned seed. Do not resample with another seed.
+- Team dataset: `data/raw/group_sample_seed46.csv` (SHA-256 `b850d24d…`, full hash in `statistics.json`). A fresh run of the instructor's script reproduces this file byte for byte.
 
-## Raw sample
+## Sample before cleaning
 
-| Star rating | Label | Count | Percent of 50,000 |
-| --- | --- | ---: | ---: |
-| 1 | Negative | 4,549 | 9.10% |
-| 2 | Negative | 2,589 | 5.18% |
-| 3 | Neutral | 3,834 | 7.67% |
-| 4 | Positive | 7,112 | 14.22% |
-| 5 | Positive | 31,916 | 63.83% |
-
-- Average Text length: 80.53 whitespace-separated words.
-- Average Summary + Text length: 84.64 words.
-- Empty or whitespace-only values: 0 in every column.
-- Five Summary entries contain the literal string N/A; seven ProfileName entries contain placeholder-like strings. These are flagged for review, not automatically treated as missing.
-- Invalid star ratings: 0.
-- Completely identical CSV rows: 0 (identifiers are included in this definition).
-- Repeated exact Summary/Text pairs beyond the first: 3,666.
-- Repeated Summary/Text pairs after casefolding and whitespace normalization beyond the first: 3,674.
-
-## Binary filtering and cleaning
-
-| Step | Rows |
+| Star rating | Count |
 | --- | ---: |
-| Original sample | 50,000 |
-| Exclude 3-star reviews | -3,834 |
-| Binary rows before deduplication | 46,166 |
-| Exclude groups with conflicting binary labels | 0 |
-| Remove repeated normalized Summary/Text pairs, retaining first | -3,397 |
-| Final binary CSV | 42,769 |
+| 1 | 4,634 |
+| 2 | 2,708 |
+| 3 | 3,660 |
+| 4 | 7,164 |
+| 5 | 31,834 |
 
-| Sentiment | Count | Percent of cleaned data |
+| Sentiment | Count | Percent |
 | --- | ---: | ---: |
-| Negative | 6,623 | 15.49% |
-| Positive | 36,146 | 84.51% |
+| Negative (1–2 stars) | 7,342 | 14.68% |
+| Neutral (3 stars) | 3,660 | 7.32% |
+| Positive (4–5 stars) | 38,998 | 78.00% |
 
-Average Text length after binary cleaning: 78.70 words.
-Majority-class baseline on this complete cleaned CSV: 84.51%. Compute the actual held-out baseline after splitting.
+- Average `Text` length: 80.30 whitespace-separated words (median 56).
+- Missing values when read with pandas: 2 `Summary`, 1 `ProfileName`. Every row has `Text` and a valid star rating.
+- Rows identical apart from `Id`: 2.
+- Repeated `Summary` + `Text` pairs (casefolded, whitespace collapsed) beyond the first copy: 3,656. None has conflicting sentiment labels.
 
-Duplicate counts differ between raw and binary stages because neutral reviews are removed before binary deduplication. These counts do not measure all near-duplicates or repeated Text with different summaries. No train/validation/test splits have been created.
+## Cleaned three-class dataset
 
-## Files and reproducibility
+`data/processed/group_seed46_clean.csv` keeps the first copy of each repeated review.
 
-- statistics.json: measured statistics, cleaning rules, and SHA-256 hashes.
-- class_counts.csv: raw and cleaned sentiment distributions.
-- distribution.png: raw ratings and cleaned binary sentiment chart.
-- Reproduce the CSVs and statistics: python scripts/prepare_sample.py
-- CSVs and archives remain excluded from Git.
+| Sentiment | Count | Percent |
+| --- | ---: | ---: |
+| Negative | 6,837 | 14.75% |
+| Neutral | 3,394 | 7.32% |
+| Positive | 36,113 | 77.92% |
+| Total | 46,344 | |
+
+Average `Text` length after cleaning: 79.81 words. Always predicting positive would score 77.92% accuracy on the cleaned data, so report macro-F1 and per-class scores alongside accuracy. Train/validation/test splits have not been created yet.
+
+## Files
+
+- `statistics.json`: all measurements, cleaning rule, and SHA-256 hashes.
+- `class_counts.csv`: sentiment counts before and after cleaning.
+- `sentiment_seed46.png`: Figure 1 for the charter.
+- Regenerate everything with `python scripts/prepare_sample.py`.
